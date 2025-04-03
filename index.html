@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Append Dynamic Divs</title>
+    <style>
+        .box {
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <label for="color">Enter Color:</label>
+    <input type="text" id="color" placeholder="e.g., red, blue" />
+    
+    <label for="size">Enter Size (px):</label>
+    <input type="number" id="size" placeholder="e.g., 100" />
+    
+    <button onclick="applyStyle()">Apply</button>
+    
+    <div id="container"></div>
+
+    <script>
+        function applyStyle() {
+            let color = document.getElementById("color").value;
+            let size = document.getElementById("size").value;
+            
+            let newDiv = document.createElement("div");
+            newDiv.classList.add("box");
+            newDiv.style.backgroundColor = color;
+            newDiv.style.width = size + "px";
+            newDiv.style.height = size + "px";
+
+            document.getElementById("container").appendChild(newDiv);
+
+            // Save to local storage
+            let storedDivs = JSON.parse(localStorage.getItem("divs")) || [];
+            storedDivs.push({ color, size });
+            localStorage.setItem("divs", JSON.stringify(storedDivs));
+        }
+
+        // Load saved divs on page load
+        window.onload = function () {
+            let storedDivs = JSON.parse(localStorage.getItem("divs")) || [];
+
+            let container = document.getElementById("container");
+            storedDivs.forEach(({ color, size }) => {
+                let div = document.createElement("div");
+                div.classList.add("box");
+                div.style.backgroundColor = color;
+                div.style.width = size + "px";
+                div.style.height = size + "px";
+                container.appendChild(div);
+            });
+        };
+    </script>
+</body>
+</html>
+ 
