@@ -3,59 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Append Dynamic Divs</title>
+    <title>Styled Calculator</title>
     <style>
-        .box {
-            display: inline-block;
-            margin: 10px;
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .calculator {
+
+            width: 300px;
+            background: #222;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .display {
+            width: 93%;
+            height: 50px;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            border: none;
+            background: #fff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            width: 100%;
+            height: 60px;
+            font-size: 22px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .number {
+            background: #f8f8f8;
+        }
+        .operator {
+            background: #ff9500;
+            color: white;
+        }
+        .clear {
+            background: red;
+            color: white;
+        }
+        .equal {
+            background: green;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
-    <label for="color">Enter Color:</label>
-    <input type="text" id="color" placeholder="e.g., red, blue" />
-    
-    <label for="size">Enter Size (px):</label>
-    <input type="number" id="size" placeholder="e.g., 100" />
-    
-    <button onclick="applyStyle()">Apply</button>
-    
-    <div id="container"></div>
+
+    <div class="calculator">
+        <input type="text" id="display" class="display" readonly>
+        <div class="buttons">
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button class="number" onclick="appendNumber('1')">1</button>
+            <button class="number" onclick="appendNumber('2')">2</button>
+            <button class="operator" onclick="appendOperator('+')">+</button>
+
+            <button class="number" onclick="appendNumber('3')">3</button>
+            <button class="number" onclick="appendNumber('4')">4</button>
+            <button class="number" onclick="appendNumber('5')">5</button>
+            <button class="operator" onclick="appendOperator('-')">−</button>
+
+            <button class="number" onclick="appendNumber('6')">6</button>
+            <button class="number" onclick="appendNumber('7')">7</button>
+            <button class="number" onclick="appendNumber('8')">8</button>
+            <button class="operator" onclick="appendOperator('*')">×</button>
+
+            <button class="number" onclick="appendNumber('9')">9</button>
+            <button class="number" onclick="appendNumber('0')">0</button>
+            <button class="equal" onclick="calculate()">=</button>
+            <button class="operator" onclick="appendOperator('/')">÷</button>
+        </div>
+    </div>
 
     <script>
-        function applyStyle() {
-            let color = document.getElementById("color").value;
-            let size = document.getElementById("size").value;
-            
-            let newDiv = document.createElement("div");
-            newDiv.classList.add("box");
-            newDiv.style.backgroundColor = color;
-            newDiv.style.width = size + "px";
-            newDiv.style.height = size + "px";
-
-            document.getElementById("container").appendChild(newDiv);
-
-            // Save to local storage
-            let storedDivs = JSON.parse(localStorage.getItem("divs")) || [];
-            storedDivs.push({ color, size });
-            localStorage.setItem("divs", JSON.stringify(storedDivs));
+        function appendNumber(num) {
+            document.getElementById("display").value += num;
         }
 
-        // Load saved divs on page load
-        window.onload = function () {
-            let storedDivs = JSON.parse(localStorage.getItem("divs")) || [];
+        function appendOperator(op) {
+            document.getElementById("display").value += op;
+        }
 
-            let container = document.getElementById("container");
-            storedDivs.forEach(({ color, size }) => {
-                let div = document.createElement("div");
-                div.classList.add("box");
-                div.style.backgroundColor = color;
-                div.style.width = size + "px";
-                div.style.height = size + "px";
-                container.appendChild(div);
-            });
-        };
+        function clearDisplay() {
+            document.getElementById("display").value = "";
+        }
+
+        function calculate() {
+            try {
+                document.getElementById("display").value = eval(document.getElementById("display").value);
+            } catch {
+                document.getElementById("display").value = "Error";
+            }
+        }
     </script>
+
 </body>
 </html>
- 
